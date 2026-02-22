@@ -101,16 +101,16 @@ while True: # this will be set to while the scoring engine is active
 ```
 **Log Appearance**
 
+```
           ip          |          result          |                         output
-          
-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-\-
-
+-----------------------------------------------------------------------------------------------------------------
       10.10.10.21     |           true           |                        GREYTEAM
-      10.10.10.22     |           false          | ssh: connect to host 10.10.10.22 port 22: Operation timed out
+      10.10.10.22     |          false           | ssh: connect to host 10.10.10.22 port 22: Operation timed out
       10.10.10.23     |           true           |                        GREYTEAM
       10.10.10.24     |           true           |                        GREYTEAM
       10.10.10.25     |           true           |                        GREYTEAM
       10.10.10.26     |           true           |                        GREYTEAM
+```
 and so on...
 
 ### Part 2.4: Metrics and Scoring
