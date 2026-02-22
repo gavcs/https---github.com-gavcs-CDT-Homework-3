@@ -115,3 +115,35 @@ and so on...
 
 ### Part 2.4: Metrics and Scoring
 
+**Metric Definition**
+
+*Points are not gained by having SSH up, rather points are lost when SSH is down. This is based on uptime being the method for points being increased for blue team.*
+
+``` python
+Uptime_Percent %= ((Successful_Checks_All_Services / Total_Checks_All_Services) * 100) - ((SSH_Failure_Checks / SSH_Total_Checks) * 15)
+Competition_Day = Uptime_Percent * 10
+```
+
+Note that SSH isn't a service that was made vulnerable. Blue team is simply tasked with not breaking it, and red team is not allowed to break it. Because it's not one of the services blue team is meant to protect, and red team will not be allowed to break it, it will be treated as a deduction rather than something that is scored when it's broken. If red team breaks it, we would need to manualy go in, calculate the points that blue team lost from SSH being down on some boxes, remove the deduction, and add the points that were originally lost on top of that. That means that red team breaking SSH will add to blue team's score. This isn't shown in the calculations because it will need to be done manually rather than automatically unless we setup a script to do so. With the way it's calculated, blue team can lose up to 150 points (or 15% of their score) if SSH is down on all machines throughout the entire competition.
+
+**Scoring Examples**
+
+```
+     Scenario     |   Checks Failed   |    SSH Uptime    |  Day Points Earned    
+-------------------------------------------------------------------------------
+Perfect Uptime    |       0/630       |       100%       |        1000
+SSH Broken on 1 ip|      70/630       |      88.89%      |       983.33
+SSH Broken on 4 ip|      280/630      |      61.90%      |       933.33
+SSH Broken on 6 ip|      420/630      |      33.33%      |        900
+SSH Broken on 9 ip|      630/630      |        0%        |        850
+```
+
+This means that the maximum number of points that can be lost (total deduction amount) is 150 points. If red team breaks SSH on enough machines in the middle of the competition that the competition needs to be paused, the amount of time that the competition is paused for would also contribute to the number of points that blue team would gain. Blue team would also not be able to have more than 1000 points total per day of the competition.
+
+**Fairness**
+
+> This metric allows for SSH to not be seen as something that red should attack, and encourages blue team to be much more thoughtful about what commands they're entering. Because red team cannot break SSH, blue team doesn't need to worry about it being down unless they cause it to be. It encourages blue team to understand ssh configuration and authentication, and to understand what they're doing rather than blindly trusting scripts and commands they get from AI or the internet. This setup also prevents red team from gaming the system by breaking SSH because it damages their chances of winning the competition by adding to blue team's points when red team breaks SSH. Blue team cannot gain anything from breaking this as Foxtrot already has logs of what's happening on each machine. This means they can't break SSH and suddenly start breaking rules without us knowing and punishing them for it. Ambiguous cases are handled by viewing the logs and determining intent when all else fails. If the logs clearly show red team targetting SSH, then blue team gains the points. If the logs show (and this has happened in the competition already) that blue team breaks pam by messing with the configuration when nothing has been done to it, therefore breaking ssh authentication, blue team will lose points for breaking SSH by doing things they seemingly are running without understanding. The way that Foxtrot has setup this competition has allowed us to rely on our discretion if something fails, so if the metric fails, we'll speak with one another and determine how many points should be deducted or added. Based on how it is setup, 150 points is the maximum that can be added/deducted.
+
+## References
+
+There have been no references made. I used my experience from the setup and preparation of competition 1 as well as the examples given directly in the homework instructions (not the links) to complete this assignment.
