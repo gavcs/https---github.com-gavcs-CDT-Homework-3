@@ -6,7 +6,7 @@ Rule 1: Interactions with grey team infrastructure that are not outlined as allo
 
 Description:
 <div align="center">
-    <p>
+    <p align="left">
         The goal of this 
     </p>
 </div>
