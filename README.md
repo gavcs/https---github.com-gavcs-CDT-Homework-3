@@ -5,7 +5,7 @@
 Rule 1: Interactions with grey team infrastructure that are not outlined as allowed will result in scoring deductions
 
 Description:
-<div align="center">
+<div align="center" padding=20px>
     <p align="left">
         The goal of this 
     </p>
