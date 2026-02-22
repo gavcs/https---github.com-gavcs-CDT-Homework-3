@@ -48,3 +48,68 @@
 
 ## Part 2 - Assessment Criterion Analysis
 
+Note that this isn't being actively used in competition 1 and is just being used for the purpose of this assignment. It's an issue that we're currently dealing with as blue team has broken SSH on at least one of the machines.
+
+### Part 2.1: Criterion Statement
+
+**Assessment**: Assessing the Status of SSH
+
+**Description**
+
+> Measures the availability of SSH on blue team boxes for the GREYTEAM user. The scoring engine will attempt to run a simple command via SSH to each of the blue boxes occasionally throughout the competition. This will apply to blue team and relates to business operations.
+
+### Part 2.2: Importance & Justification
+
+**Importance**
+
+> The reason this is important is because SSH will be used by Foxtrot team to be able to do work inside each of the machines during/between the competitions. Shutting off or breaking SSH will affect how well Foxtrot will be able to administrate the competition. It teaches blue team to be careful when kicking out attackers. In a real-world scenario, even if attackers are in a machine, it may be necessary to keep critical services active while still preventing the attackers from doing more. Blue team will need to make sure they're not causing critical services to go down. This will protect the integrity of the competition. This also incentivises blue team being intentional with their actions rather than blindly relying on AI generated scripts doing things they don't understand. Blue team should understand what's being done and learn rather than relying on things that could potentially have drastic consequences in real-life situations.
+
+**What would be lost if this wasn't assessed?**
+
+> It would mean Foxtrot team wouldn't be able to access the boxes they need to administrate in some cases. Blue team shouldn't just immediately disable SSH to prevent red team from accessing it, they should be intentional in preventing only the wrong people from accessing the machines. Not having this rule also makes it easier for blue team to just disable ssh access or to follow AI scripts blindly without understanding them. Business continuity is important, and breaking services that will need to work once the incident is resolved only causes further problems when things can be fixed in other ways in many cases.
+
+### Part 2.3: Measurement Methodology
+
+**Sampling Frequency**
+
+> This check will be done on every box, so the checks should be staggered so it's not SSHing to every single box at the same time. The script should go through the list of hosts, using SSH on a host every 10 seconds to verify that it's active. This frequency would mean that every box is checked at least once every 2 minutes (technically less).
+
+**Measurement Process**
+
+> This is done through a custom script that runs a whoami command on the boxes and determines whether the command was successful or not. In this case, it doesn't just determine whether SSH is active, it also ensures that the GREYTEAM user's password hasn't been changed and that Foxtrot team is able to access the machine at any time. This runs on the scoring engine box within the grey team infrastructure. It's done in the same network as both teams, but interactions that would break the affectiveness of this scoring method are prevented by the rule created in part 1 of this assignment. A success is the command returning GREYTEAM, and a failure would be the SSH command failing.
+
+**Data Collection**
+
+> The data from this will be stored using methods from the scoring engine. This can also be done via a database as well. The data stored would be success/failure and the output of the commands. It will also be checked immediately before and after each competition day to ensure integrity.
+
+**Technical Implementation**
+
+``` python
+import subprocess
+import time
+
+ip_list = # list of ips that SSH needs to be active on
+
+while True: # this will be set to while the scoring engine is active
+    for ip in ip_list:
+        result = subprocess.run([f"ssh", f"-o", f"ConnectTimeout=5", f"GREYTEAM@{ip}", f"\"whoami\""], capture_output=True, text=True)
+        if result:
+            # insert result.stdout and success to the database with the ip as the primary key
+        else:
+            # insert result.stdout and failure to the fatabase with the ip as the primary key
+        time.sleep(10) # try the next ip in 10 seconds
+```
+**Log Appearance**
+
+          ip          |          result          |                         output
+_______________________________________________________________________________________________________
+      10.10.10.21     |           true           |                        GREYTEAM
+      10.10.10.22     |           false          | ssh: connect to host 10.10.10.22 port 22: Operation timed out
+      10.10.10.23     |           true           |                        GREYTEAM
+      10.10.10.24     |           true           |                        GREYTEAM
+      10.10.10.25     |           true           |                        GREYTEAM
+      10.10.10.26     |           true           |                        GREYTEAM
+and so on...
+
+### Part 2.4: Metrics and Scoring
+
