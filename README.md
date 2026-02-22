@@ -34,4 +34,17 @@
 
 **Consequences**
 
-> Consequences are determined entirely at Foxtrot's discretion. The consequences vary based on the severity of the actions taken. If (for example) red team manages to get into the deployment box and read through each of the ansible scripts to get some of the flags, that would potentially result in the flags not counting. 
+> Consequences are determined entirely at Foxtrot's discretion. The consequences vary based on the severity of the actions taken. If (for example) red team manages to get into the deployment box and read through each of the ansible scripts to get some of the flags, that would potentially result in the flags not counting. Rule breaking will be discussed within grey team, and penalties and/or warnings will be given before the next competition day.
+
+**Prevention**
+
+> Some of the ways that machines will prevent other teams from accessing them is through allowing ssh only for GREYTEAM, changing the passwords, and not allowing either team to access the console of any of the machines (which is already done automatically). This isn't a perfect fix, but it fixes most of the risk associated with breaking this rule.
+
+### Part 1.4: Real-World Justification
+
+**Why is this rule necessary?**
+
+> The purpose of this rule is to make sure the competition is more realistic for the participants. In a real-world scenario, red team would not be able to access the scripts inserting flags in plaintext and with all the details of how things are setup to be purposefully vulnerable. For blue team, they wouldn't be able to see where flags are placed and documentation on how services are made to be vulnerable. This is important for enforcing the usefulness of running the competition. The purpose is to gain experience through the competition, which this rule enforces.
+
+## Part 2 - Assessment Criterion Analysis
+
